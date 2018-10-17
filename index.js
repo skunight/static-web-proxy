@@ -19,7 +19,7 @@ class Proxy {
     })
     const logger = log4js.getLogger()
     this.app.use(log4js.connectLogger(logger));
-    this.app.use(this.proxy.path ,httpproxy({
+    this.app.use(this.proxy.path,httpproxy({
       host: this.proxy.host,
       port: this.proxy.port,
       path: this.proxy.path,
