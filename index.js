@@ -19,12 +19,23 @@ class Proxy {
     })
     const logger = log4js.getLogger()
     this.app.use(log4js.connectLogger(logger));
-    this.app.use(this.proxy.path ,httpproxy({
-      host: this.proxy.host,
-      port: this.proxy.port,
-      path: this.proxy.path,
-      auth: this.proxy.auth
-    }))
+    if(Array.isArray(this.proxy)){
+      for(let p of this.proxy) {
+        this.app.use(p.path, httpproxy({
+          host: p.host,
+          port: p.port,
+          path: p.path,
+          auth: p.auth
+        }))
+      }
+    } else {
+      this.app.use(this.proxy.path, httpproxy({
+        host: this.proxy.host,
+        port: this.proxy.port,
+        path: this.proxy.path,
+        auth: this.proxy.auth
+      }))
+    }
     this.app.use(function (req, res, next) {
       res.set('Cache-Control', 'no-cache')
       next()
