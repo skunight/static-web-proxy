@@ -4,7 +4,7 @@ const _ = require('lodash')
 
 module.exports = (opts) => {
   const options = {
-    target: `http://${opts.host}:${opts.port}${opt.targetPath || '/'}`,
+    target: `http://${opts.host}:${opts.port}${opts.targetPath || '/'}`,
     changeOrigin: true,
     ws: true,
     pathRewrite: {
