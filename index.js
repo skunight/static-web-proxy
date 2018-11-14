@@ -25,7 +25,8 @@ class Proxy {
           host: p.host,
           port: p.port,
           path: p.path,
-          auth: p.auth
+          auth: p.auth,
+          targetPath: p.targetPath
         }))
       }
     } else {
@@ -33,7 +34,8 @@ class Proxy {
         host: this.proxy.host,
         port: this.proxy.port,
         path: this.proxy.path,
-        auth: this.proxy.auth
+        auth: this.proxy.auth,
+        targetPath: p.targetPath
       }))
     }
     this.app.use(function (req, res, next) {

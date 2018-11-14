@@ -16,6 +16,7 @@ const proxy = new Proxy({
     {                                   //代理
       host: 'localhost',                //代理HOST
       port: 80,                         //代理端口
+      targetPath:'/',                   //代理根路径
       path: '/apin',                    //原目录(会代理到代理服务的'/'目录)
       auth: (req, res) => {}            //签名方法(可选)
     }

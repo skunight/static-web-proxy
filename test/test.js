@@ -5,6 +5,7 @@ const proxy = new Proxy({
       host: '127.0.0.1',
       port: 3000,
       path: '/api',
+      targetPath: '/wechat',
       auth: (req) => {
         req.setHeader('X-Special-Proxy-Header', 'foobar');
       }
