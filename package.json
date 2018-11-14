@@ -1,6 +1,6 @@
 {
   "name": "static-web-proxy",
-  "version": "1.0.6",
+  "version": "1.0.61",
   "description": "",
   "main": "index.js",
   "repository": "skunight/static-web-proxy",
