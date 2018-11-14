@@ -35,7 +35,7 @@ class Proxy {
         port: this.proxy.port,
         path: this.proxy.path,
         auth: this.proxy.auth,
-        targetPath: p.targetPath
+        targetPath: this.proxy.targetPath
       }))
     }
     this.app.use(function (req, res, next) {
