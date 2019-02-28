@@ -4,7 +4,7 @@ const _ = require('lodash')
 
 module.exports = (opts) => {
   const options = {
-    target: `http://${opts.host}:${opts.port}${opts.targetPath || '/'}`,
+    target: `${opts.scheme}://${opts.host}:${opts.port}${opts.targetPath || '/'}`,
     changeOrigin: true,
     ws: true,
     pathRewrite: {
@@ -13,7 +13,7 @@ module.exports = (opts) => {
     onProxyReq: (proxyReq, req, res, options) => {
       if (opts.auth && _.isFunction(opts.auth)) {
         opts.auth(proxyReq, res)
-      } 
+      }
       // console.log('proxyReq: ', proxyReq.getHeaders())
     }
   }

@@ -26,6 +26,7 @@ class Proxy {
           port: p.port,
           path: p.path,
           auth: p.auth,
+          scheme: p.scheme || 'http',
           targetPath: p.targetPath
         }))
       }
