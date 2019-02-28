@@ -15,6 +15,7 @@ const proxy = new Proxy({
   proxy: [
     {                                   //代理
       host: 'localhost',                //代理HOST
+      scheme: 'http',                   //协议(可选，默认http)
       port: 80,                         //代理端口
       targetPath:'/',                   //代理根路径
       path: '/apin',                    //原目录(会代理到代理服务的'/'目录)
