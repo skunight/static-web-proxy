@@ -14,27 +14,7 @@ module.exports = (opts) => {
       if (opts.auth && _.isFunction(opts.auth)) {
         opts.auth(proxyReq, res)
       }
-      // console.log('proxyReq: ', proxyReq.getHeaders())
-    }
+    },
   }
   return httpProxy(options)
 }
-
-// module.exports = (opts) => (req,res,next) => {
-//   const proxy = new httpProxy.createProxyServer({
-//     target: {
-//       host: opts.host,
-//       port: opts.port,
-//       path: '/api'
-//     },
-//   })
-//   proxy.on('proxyReq', function (proxyReq, req, res, options) {
-//     console.log('options: ', options)
-//     proxyReq.path = proxyReq.path.replace(/\/api/,'')
-//     console.log('proxyReq: ', proxyReq.path)
-//     if (opts.auth && _.isFunction(opts.auth)) {
-//       opts.auth(proxyReq, res)
-//     }
-//   })
-//   proxy.web(req, res)
-// }

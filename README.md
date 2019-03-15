@@ -20,6 +20,7 @@ const proxy = new Proxy({
       targetPath:'/',                   //代理根路径
       path: '/apin',                    //原目录(会代理到代理服务的'/'目录)
       auth: (req, res) => {}            //签名方法(可选)
+      heartBeat: 5000                   //心跳检测 默认不开启
     }
   ],
   web: {
