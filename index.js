@@ -43,7 +43,7 @@ class Proxy {
         scheme: this.proxy.scheme || 'http',
         targetPath: this.proxy.targetPath
       }))
-      this._heartBeat(p)
+      this._heartBeat(this.proxy)
     }
     this.app.use(function (req, res, next) {
       res.set('Cache-Control', 'no-cache')
