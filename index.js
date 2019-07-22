@@ -67,12 +67,10 @@ class Proxy {
               Reflect.deleteProperty(req.query, key)
             }
           }
-          let url
+          let url = target
           if (Reflect.ownKeys(req.query).length > 0) {
             url = `${target}?${qs.stringify(req.query)}`
-          } else {
-            url = `${target}`
-          }
+          } 
           console.log('redirect', req.path, 'to', url)
           res.redirect(301, url)
         } else {
