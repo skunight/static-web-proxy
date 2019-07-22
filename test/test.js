@@ -18,7 +18,7 @@ const proxy = new Proxy({
     '/a/b': {
       target: '/c/d',
       query: {
-        'name': 'bbbb'
+        'name': 'type'
       }
     }
   }
