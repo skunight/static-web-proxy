@@ -13,6 +13,9 @@ const proxy = new Proxy({
   ],
   bind:{
     port:8080
+  },
+  redirect: {
+    '/a/b':'/cccc/d'
   }
 })
 proxy.start()

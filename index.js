@@ -4,13 +4,16 @@ const history = require('connect-history-api-fallback')
 const httpproxy = require('./libs/proxy')
 const http = require('http')
 const https = require('https')
+const qs = require('querystring')
 class Proxy {
   constructor({
-    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public`},proxy
+    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public` }, proxy, redirect
   }) {
     this.bind = bind
     this.web = web
     this.proxy = proxy
+    this.redirect = redirect
+    console.log('redirect: ', redirect);
     this.app = express()
   }
 
@@ -45,10 +48,21 @@ class Proxy {
       }))
       this._heartBeat(this.proxy)
     }
-    this.app.use(function (req, res, next) {
+    this.app.use((req, res, next) => {
       res.set('Cache-Control', 'no-cache')
       next()
     })
+    if (this.redirect) {
+      this.app.use((req, res, next) => {
+        if(this.redirect[req.path]) {
+          const url = `${this.redirect[req.path]}?${qs.stringify(req.query)}`
+          console.log('redirect', req.path, 'to', url)
+          res.redirect(301, url)
+        } else {
+          next()
+        }
+      })
+    }
     this.app.use(history())
     this.app.use(express.static(this.web.dir))
     this.app.listen(this.bind.port,this.bind.host)

@@ -29,6 +29,9 @@ const proxy = new Proxy({
   bind:{                                //启动绑定
     host: '0.0.0.0'                     
     port: 8080
+  },
+  redirect: {
+    '/a/b': '/c/d'                      //重定向
   }
 })
 proxy.start()
