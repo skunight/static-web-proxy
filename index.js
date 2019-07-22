@@ -13,7 +13,6 @@ class Proxy {
     this.web = web
     this.proxy = proxy
     this.redirect = redirect
-    console.log('redirect: ', redirect);
     this.app = express()
   }
 
@@ -53,30 +52,39 @@ class Proxy {
       next()
     })
     if (this.redirect) {
-      this.app.use((req, res, next) => {
-        const { target, query = {} } = this.redirect[req.path] ? this.redirect[req.path] : {}
-        if (target) {
-          for (const key of Reflect.ownKeys(req.query)) {
-            if(query[key]) {
-              Reflect.defineProperty(req.query, query[key], { 
+      for(const r of Reflect.ownKeys(this.redirect)) {
+        this.app.get(r, (req, res, next) => {
+          const { target, query = {} } = this.redirect[req.route.path] ? this.redirect[req.route.path] : {}
+          if (target) {
+            for (const key of Reflect.ownKeys(req.query)) {
+              if(query[key]) {
+                Reflect.defineProperty(req.query, query[key], { 
+                  configurable: true,
+                  enumerable: true,
+                  value: req.query[key],
+                  writable: true,
+                })
+                Reflect.deleteProperty(req.query, key)
+              }
+            }
+            for (const key of Reflect.ownKeys(req.params)) {
+              Reflect.defineProperty(req.query, key, {
                 configurable: true,
                 enumerable: true,
-                value: req.query[key],
+                value: req.params[key],
                 writable: true,
               })
-              Reflect.deleteProperty(req.query, key)
             }
+            let url = target
+            if (Reflect.ownKeys(req.query).length > 0) {
+              url = `${target}?${qs.stringify(req.query)}`
+            } 
+            console.log('redirect', req.path, 'to', url)
+            res.redirect(301, url)
           }
-          let url = target
-          if (Reflect.ownKeys(req.query).length > 0) {
-            url = `${target}?${qs.stringify(req.query)}`
-          } 
-          console.log('redirect', req.path, 'to', url)
-          res.redirect(301, url)
-        } else {
           next()
-        }
-      })
+        })
+      }
     }
     this.app.use(history())
     this.app.use(express.static(this.web.dir))
