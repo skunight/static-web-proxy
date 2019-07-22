@@ -55,7 +55,19 @@ class Proxy {
     if (this.redirect) {
       this.app.use((req, res, next) => {
         if(this.redirect[req.path]) {
-          const url = `${this.redirect[req.path]}?${qs.stringify(req.query)}`
+          const { target, query } = this.redirect[req.path]
+          let url = ''
+          for(let key in req.query) {
+            if(query[key]) {
+              Object.assign(req.query, {[query[key]]: req.query[key]} )
+              Reflect.deleteProperty(req.query, key)
+            }
+          }
+          if (Reflect.ownKeys(req.query).length > 0) {
+            url = `${target}?${qs.stringify(req.query)}`
+          } else {
+            url = `${target}`
+          }
           console.log('redirect', req.path, 'to', url)
           res.redirect(301, url)
         } else {

@@ -15,7 +15,12 @@ const proxy = new Proxy({
     port:8080
   },
   redirect: {
-    '/a/b':'/cccc/d'
+    '/a/b': {
+      target: '/c/d',
+      query: {
+        'name': 'bbbb'
+      }
+    }
   }
 })
 proxy.start()

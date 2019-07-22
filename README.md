@@ -30,8 +30,13 @@ const proxy = new Proxy({
     host: '0.0.0.0'                     
     port: 8080
   },
-  redirect: {
-    '/a/b': '/c/d'                      //重定向
+  redirect: {                           //重定向
+    '/a/b': {
+      target: '/c/d',
+      query: {
+        'name': 'bbbb'
+      }
+    }
   }
 })
 proxy.start()
