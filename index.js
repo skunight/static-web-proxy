@@ -1,5 +1,6 @@
 const express = require('express')
 const log4js = require('log4js')
+const compression = require('compression')
 const history = require('connect-history-api-fallback')
 const httpproxy = require('./libs/proxy')
 const http = require('http')
@@ -7,13 +8,14 @@ const https = require('https')
 const qs = require('querystring')
 class Proxy {
   constructor({
-    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public` }, proxy, redirect
+    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public` }, proxy, redirect, compression = true
   }) {
     this.bind = bind
     this.web = web
     this.proxy = proxy
     this.redirect = redirect
     this.app = express()
+    this.compression = compression
   }
 
   start() {
@@ -23,6 +25,9 @@ class Proxy {
     })
     const logger = log4js.getLogger()
     this.app.use(log4js.connectLogger(logger));
+    if (this.compression) {
+      this.app.use(compression())
+    }
     if(Array.isArray(this.proxy)){
       for(let p of this.proxy) {
         this.app.use(p.path, httpproxy({
@@ -86,6 +91,7 @@ class Proxy {
         })
       }
     }
+    
     this.app.use(history())
     this.app.use(express.static(this.web.dir))
     this.app.listen(this.bind.port,this.bind.host)

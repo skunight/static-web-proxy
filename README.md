@@ -30,6 +30,7 @@ const proxy = new Proxy({
     host: '0.0.0.0'                     
     port: 8080
   },
+  compression: true,                    // gzip默认为true
   redirect: {                           //重定向
     '/a/b': {
       target: '/c/d',

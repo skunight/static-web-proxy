@@ -14,6 +14,10 @@ const proxy = new Proxy({
   bind:{
     port:8080
   },
+  web: {
+    dir: 'dist'
+  },
+  compression: true,
   redirect: {
     '/a/:id': {
       target: '/c/d',
