@@ -52,10 +52,10 @@ class Proxy {
       }))
       this._heartBeat(this.proxy)
     }
-    this.app.use((req, res, next) => {
-      res.set('Cache-Control', 'no-cache')
-      next()
-    })
+    // this.app.use((req, res, next) => {
+    //   res.set('Cache-Control', 'no-cache')
+    //   next()
+    // })
     if (this.redirect) {
       for(const r of Reflect.ownKeys(this.redirect)) {
         this.app.get(r, (req, res, next) => {
