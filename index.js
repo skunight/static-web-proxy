@@ -21,7 +21,7 @@ class Proxy {
 
   start() {
     if (this.limit) {
-      express.raw({ limit })
+      express.raw({ limit: this.limit })
     }
     log4js.configure({
       appenders: { console: { type: 'console' } },
