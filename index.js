@@ -8,7 +8,7 @@ const https = require('https')
 const qs = require('querystring')
 class Proxy {
   constructor({
-    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public` }, proxy, redirect, limit, compression = true
+    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public` }, proxy, redirect, compression = true
   }) {
     this.bind = bind
     this.web = web
@@ -16,13 +16,9 @@ class Proxy {
     this.redirect = redirect
     this.app = express()
     this.compression = compression
-    this.limit = limit
   }
 
   start() {
-    if (this.limit) {
-      express.raw({ limit: this.limit })
-    }
     log4js.configure({
       appenders: { console: { type: 'console' } },
       categories: { default: { appenders: ['console'], level: 'info' } }

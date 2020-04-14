@@ -31,7 +31,6 @@ const proxy = new Proxy({
     port: 8080
   },
   compression: true,                    // gzip默认为true
-  limit: '5mb',                         // 设置body大小限制，默认100kb
   redirect: {                           //重定向
     '/a/b': {
       target: '/c/d',
