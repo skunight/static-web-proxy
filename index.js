@@ -8,7 +8,7 @@ const https = require('https')
 const qs = require('querystring')
 class Proxy {
   constructor({
-    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public` }, proxy, redirect, compression = true
+    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public` }, proxy, redirect, limit, compression = true
   }) {
     this.bind = bind
     this.web = web
@@ -16,20 +16,24 @@ class Proxy {
     this.redirect = redirect
     this.app = express()
     this.compression = compression
+    this.limit = limit
   }
 
   start() {
+    if (this.limit) {
+      express.raw({ limit })
+    }
     log4js.configure({
       appenders: { console: { type: 'console' } },
-      categories: { default: { appenders: [ 'console' ], level: 'info' } }
+      categories: { default: { appenders: ['console'], level: 'info' } }
     })
     const logger = log4js.getLogger()
     this.app.use(log4js.connectLogger(logger));
     if (this.compression) {
       this.app.use(compression())
     }
-    if(Array.isArray(this.proxy)){
-      for(let p of this.proxy) {
+    if (Array.isArray(this.proxy)) {
+      for (let p of this.proxy) {
         this.app.use(p.path, httpproxy({
           host: p.host,
           port: p.port,
@@ -39,7 +43,7 @@ class Proxy {
           targetPath: p.targetPath
         }))
         this._heartBeat(p)
-        
+
       }
     } else {
       this.app.use(this.proxy.path, httpproxy({
@@ -57,13 +61,13 @@ class Proxy {
     //   next()
     // })
     if (this.redirect) {
-      for(const r of Reflect.ownKeys(this.redirect)) {
+      for (const r of Reflect.ownKeys(this.redirect)) {
         this.app.get(r, (req, res, next) => {
           const { target, query = {} } = this.redirect[req.route.path] ? this.redirect[req.route.path] : {}
           if (target) {
             for (const key of Reflect.ownKeys(req.query)) {
-              if(query[key]) {
-                Reflect.defineProperty(req.query, query[key], { 
+              if (query[key]) {
+                Reflect.defineProperty(req.query, query[key], {
                   configurable: true,
                   enumerable: true,
                   value: req.query[key],
@@ -83,7 +87,7 @@ class Proxy {
             let url = target
             if (Reflect.ownKeys(req.query).length > 0) {
               url = `${target}?${qs.stringify(req.query)}`
-            } 
+            }
             console.log('redirect', req.path, 'to', url)
             res.redirect(301, url)
           }
@@ -91,10 +95,10 @@ class Proxy {
         })
       }
     }
-    
+
     this.app.use(history())
     this.app.use(express.static(this.web.dir))
-    this.app.listen(this.bind.port,this.bind.host)
+    this.app.listen(this.bind.port, this.bind.host)
   }
 
   _heartBeat(p) {
@@ -102,7 +106,7 @@ class Proxy {
       setInterval(() => {
         const url = `${p.scheme || 'http'}://${p.host}:${p.port}${p.targetPath || '/'}`
         const req = (p.scheme === 'https' ? https : http).request(url, {}, (res) => {
-          if(res.statusCode !== 400) {
+          if (res.statusCode !== 400) {
             console.error(`Proxy "${url}" HeartBeat Error！StatusCode: ${res.statusCode}`)
           }
         })
