@@ -25,6 +25,7 @@ const proxy = new Proxy({
   ],
   web: {
     dir: path.join(__dirname, '/dist')  //静态网站目录
+    index: 'index.html'                 //初始页面文件
   },
   bind:{                                //启动绑定
     host: '0.0.0.0'                     

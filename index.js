@@ -8,7 +8,7 @@ const https = require('https')
 const qs = require('querystring')
 class Proxy {
   constructor({
-    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public` }, proxy, redirect, compression = true
+    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public`, index: 'index.html' }, proxy, redirect, compression = true
   }) {
     this.bind = bind
     this.web = web
@@ -93,7 +93,9 @@ class Proxy {
     }
 
     this.app.use(history())
-    this.app.use(express.static(this.web.dir))
+    this.app.use(express.static(this.web.dir, {
+      index: this.web.index || 'index.html'
+    }))
     this.app.listen(this.bind.port, this.bind.host)
   }
 
