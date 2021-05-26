@@ -6,9 +6,10 @@ const httpproxy = require('./libs/proxy')
 const http = require('http')
 const https = require('https')
 const qs = require('querystring')
+const ba = require('basicauth-middleware')
 class Proxy {
   constructor({
-    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public`, index: 'index.html' }, proxy, redirect, compression = true
+    bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public`, index: 'index.html' }, basicauth, proxy, redirect, compression = true
   }) {
     this.bind = bind
     this.web = web
@@ -16,6 +17,7 @@ class Proxy {
     this.redirect = redirect
     this.app = express()
     this.compression = compression
+    this.basicauth = basicauth
   }
 
   start() {
@@ -27,6 +29,9 @@ class Proxy {
     this.app.use(log4js.connectLogger(logger));
     if (this.compression) {
       this.app.use(compression())
+    }
+    if(this.basicauth) {
+      this.app.use(ba(this.basicauth.username, this.basicauth.passwd))
     }
     if (Array.isArray(this.proxy)) {
       for (let p of this.proxy) {
