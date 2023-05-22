@@ -20,10 +20,11 @@ class Proxy {
     this.compression = compression
     this.basicauth = basicauth
     const sentryDns = process.env.SENTRY_DNS
-    if(sentryDns!=null && sentryDns != "")
-    Sentry.init({
-      dsn: sentryDns,
-    })
+    if(sentryDns!=null && sentryDns != "") {
+      Sentry.init({
+        dsn: sentryDns,
+      })
+    }
   }
 
   start() {
