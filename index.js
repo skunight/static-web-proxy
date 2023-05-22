@@ -7,6 +7,7 @@ const http = require('http')
 const https = require('https')
 const qs = require('querystring')
 const ba = require('basicauth-middleware')
+const Sentry = require('@sentry/node')
 class Proxy {
   constructor({
     bind = { host: '0.0.0.0', port: 3000 }, web = { dir: `${__dirname}/public`, index: 'index.html' }, basicauth, proxy, redirect, compression = true
@@ -18,6 +19,12 @@ class Proxy {
     this.app = express()
     this.compression = compression
     this.basicauth = basicauth
+    const sentryDns = process.env.SENTRY_DNS
+    if(sentryDns!=null && sentryDns != "") {
+      Sentry.init({
+        dsn: sentryDns,
+      })
+    }
   }
 
   start() {

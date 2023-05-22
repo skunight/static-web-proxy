@@ -1,6 +1,6 @@
 {
   "name": "static-web-proxy",
-  "version": "1.3.7",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "repository": "skunight/static-web-proxy",
@@ -10,12 +10,14 @@
   "author": "zzy",
   "license": "MIT",
   "dependencies": {
+    "@sentry/node": "^7.52.1",
     "basicauth-middleware": "^3.1.1",
     "compression": "^1.7.4",
     "connect-history-api-fallback": "^1.5.0",
     "express": "^4.17.1",
-    "http-proxy-middleware": "^0.19.0",
+    "http-proxy-middleware": "^2.0.6",
     "lodash": "^4.17.4",
-    "log4js": "^2.10.0"
+    "log4js": "^2.10.0",
+    "sentry": "^0.1.2"
   }
 }

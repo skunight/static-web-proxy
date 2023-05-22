@@ -19,16 +19,16 @@ const proxy = new Proxy({
       port: 80,                         //代理端口
       targetPath:'/',                   //代理根路径
       path: '/apin',                    //原目录(会代理到代理服务的'/'目录)
-      auth: (req, res) => {}            //签名方法(可选)
+      auth: (req, res) => {},           //签名方法(可选)
       heartBeat: 5000                   //心跳检测 默认不开启
     }
   ],
   web: {
-    dir: path.join(__dirname, '/dist')  //静态网站目录
+    dir: path.join(__dirname, '/dist'), //静态网站目录
     index: 'index.html'                 //初始页面文件
   },
   bind:{                                //启动绑定
-    host: '0.0.0.0'                     
+    host: '0.0.0.0',
     port: 8080
   },
   compression: true,                    // gzip默认为true
