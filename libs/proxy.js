@@ -23,5 +23,5 @@ module.exports = (opts) => {
       },
     }
   }
-  return httpProxy(options)
+  return httpProxy.createProxyMiddleware(options)
 }
